@@ -19,10 +19,9 @@ gdb.context.terminal = ["konsole","-e"]
 if DEBUG:
     context.log_level = "debug"
 elf = ELF(filename)
-# logstream = open('log.txt',"w")
 
 if LOCAL:
-    sh = process(filename,stdin=PTY,raw=False)#,stdout=logstream )
+    sh = process(filename,stdin=PTY,raw=False)# work in local process  p.shutdown(direction="send")  shutdown only send a fin still can recvive data
 else:
     sh = remote(IP,PORT)
 
@@ -40,7 +39,7 @@ m1 = int(sh.recvline().strip().decode(),16)
 print("m1 = ",m1)
 sh.recvuntil(b'> ')
 sh.sendline(b'2')
-sh.send(chr(tty.CEOF))
+sh.send(chr(tty.CEOF)) # p.shutdown(direction="send") remote socket
 # sh.recvuntil(b'> ')
 sh.recvlines(2)
 m2 = int(sh.recvline().strip().decode(),16)
